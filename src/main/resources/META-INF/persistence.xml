@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+                                 http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+             version="1.0">
+
+    <persistence-unit name="eclipsMysql" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>entyties.User</class>
+        <class>entyties.PersonalData</class>
+        <class>entyties.Service</class>
+        <class>entyties.Bonus</class>
+        <class>entyties.LocalDateTimeConvereter</class>
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/tradebeeper?useSSL=false&amp;useUnicode=true&amp;serverTimezone=UTC"/>
+            <property name="javax.persistence.jdbc.user" value="tradebeeper"/>
+            <property name="javax.persistence.jdbc.password" value="MegaP0kem0n"/>
+            <property name="javax.persistence.schema-generation.database.action" value="create"/>
+            <property name="eclipselink.query-results-cache" value="false"/>
+            <property name="eclipselink.cache.shared.default" value="false"/>
+            <property name="eclipselink.cache.size.default" value="0"/>
+            <property name="eclipselink.cache.type.default" value="None"/>
+        </properties>
+    </persistence-unit>
+</persistence>
