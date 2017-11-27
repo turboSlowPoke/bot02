@@ -1,6 +1,9 @@
 package dbservices;
 
 
+import entyties.Task;
+import entyties.TaskStatus;
+import entyties.TaskType;
 import entyties.User;
 import org.apache.log4j.Logger;
 
@@ -70,9 +73,9 @@ public class DbService {
             log.info("Добавляем приглашенного юзера в базу...");
             EntityManager em = entityManagerFactory.createEntityManager();
             EntityTransaction tr = em.getTransaction();
-            TypedQuery<User> findParentUserQuery = em.createQuery("SELECT u FROM User u WHERE u.chatId=:id",User.class)
-                        .setParameter("id",user.getParentId());
-            User parentUser = findParentUserQuery.getSingleResult();
+            //TypedQuery<User> findParentUserQuery = em.createQuery("SELECT u FROM User u WHERE u.chatId=:id",User.class)
+             //           .setParameter("id",user.getParentId());
+            User parentUser = em.find(User.class,user.getParentId());//findParentUserQuery.getSingleResult();
             if (parentUser==null)
                 throw new NoUserInDbException();
             Query updateQuery1 = em.createQuery("UPDATE User u SET u.leftKey=u.leftKey+2, u.rightKey=u.rightKey+2 WHERE u.leftKey>:key")
@@ -120,4 +123,45 @@ public class DbService {
         }
     }
 
+    public synchronized Task findOpenPayBonusesTask(User customer) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        TypedQuery<Task> query = em.createQuery("SELECT t FROM Task t JOIN t.customer c WHERE c.id=:id AND t.status=:s AND t.type=:t",Task.class)
+                .setParameter("id", customer.getId())
+                .setParameter("s", TaskStatus.OPEN)
+                .setParameter("t", TaskType.PAY_BONUSES);
+        Task task = null;
+        try {
+            task = query.getSingleResult();
+        }catch (Exception e){
+            task=null;
+            log.error("Ошбика при поиске открытой заявки");
+            log.trace(e);
+            System.out.println("Ошбика при поиске открытой заявки");
+            e.printStackTrace();
+        } finally {
+           em.clear();
+           em.close();
+           return task;
+        }
+    }
+
+    public synchronized void mergeTask(Task task) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        EntityTransaction tr = em.getTransaction();
+        tr.begin();
+        try {
+            em.merge(task);
+            tr.commit();
+        }catch (Exception e){
+            if (tr.isActive())
+                tr.rollback();
+            System.out.println("Ошибка при сохранении заявки");
+            log.error("Ошибка при сохранении заявки");
+            log.trace(e);
+            e.printStackTrace();
+        }finally {
+            em.clear();
+            em.close();
+        }
+    }
 }

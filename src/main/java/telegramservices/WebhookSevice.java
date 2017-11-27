@@ -3,10 +3,7 @@ package telegramservices;
 import dbservices.ActionType;
 import dbservices.DbService;
 import dbservices.NoUserInDbException;
-import dbservices.UserNotAddInDbException;
-import entyties.PersonalData;
-import entyties.Service;
-import entyties.User;
+import entyties.*;
 import main.Config;
 import org.apache.log4j.Logger;
 import org.telegram.telegrambots.api.methods.BotApiMethod;
@@ -17,9 +14,9 @@ import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import telegramservices.enums.KeyboardCommand;
-import telegramservices.enums.ReferalProgCommand;
+import telegramservices.enums.CallBackCommand;
 
-import javax.persistence.criteria.CriteriaBuilder;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -61,8 +58,8 @@ public class WebhookSevice extends TelegramWebhookBot {
                 .setChatId(request.getMessage().getChatId());
         User user = dbService.findUser(request.getMessage().getChatId());
         String dataFromRequest = request.getData();
-        ReferalProgCommand referalProgCommand = ReferalProgCommand.getTYPE(dataFromRequest);
-        if (referalProgCommand!=ReferalProgCommand.FAIL){
+        CallBackCommand referalProgCommand = CallBackCommand.getTYPE(dataFromRequest);
+        if (referalProgCommand!= CallBackCommand.FAIL){
             switch (referalProgCommand){
                 case VIEWREFERALS:
                     int parentLevel = user.getLevel();
@@ -83,75 +80,90 @@ public class WebhookSevice extends TelegramWebhookBot {
                         for (User u : userList) {
                             if (parentLevel + 1 == u.getLevel()) {
                                 if (u.getAdvcashTransactions().size()>0){
-                                    level1o.append(u.getUserName()+"+\n");
+                                    level1o.append(u.getPersonalData().getTelegramUsername()+"+\n");
                                     countlevel1++;
                                 }else
                                 {
-                                    level1n.append(u.getUserName()+"\n");
+                                    level1n.append(u.getPersonalData().getTelegramUsername()+"\n");
                                 }
                             } else if (parentLevel + 2 == u.getLevel()) {
                                 if (u.getAdvcashTransactions().size()>0){
-                                    level2o.append(u.getUserName()+"+\n");
+                                    level2o.append(u.getPersonalData().getTelegramUsername()+"+\n");
                                     countlevel1++;
                                 }else
                                 {
-                                    level2n.append(u.getUserName()+"\n");
+                                    level2n.append(u.getPersonalData().getTelegramUsername()+"\n");
                                 }
                             } else {
                                 if (u.getAdvcashTransactions().size()>0){
-                                    level3o.append(u.getUserName()+"+\n");
+                                    level3o.append(u.getPersonalData().getTelegramUsername()+"+\n");
                                     countlevel1++;
                                 }else
                                 {
-                                    level3n.append(u.getUserName()+"\n");
+                                    level3n.append(u.getPersonalData().getTelegramUsername()+"\n");
                                 }
                             }
                         }
-                        text = "*Рефералы 1го уровня:* "
-                                + "\n_(оплативших подписку - "+user.getPersonalData().getReferalsForPrize().size()+")_"
+                        text = "<b>Рефералы 1го уровня:</b> "
+                                + "\n<i>(оплативших подписку - "+user.getBonus().getPaidReferalsIdList().size()+")</i>"
                                 + "\n" + level1o.toString()
                                 + "\n" + level1n.toString()
-                                + "\n*Рефералы 2го уровня:* "
+                                + "\n<b>Рефералы 2го уровня:</b> "
                                 + "\n" + level2o.toString()
                                 +"\n" + level2n.toString()
-                                + "\n*Рефералы 3го уровня:* "
+                                + "\n<b>Рефералы 3го уровня:</b> "
                                 + "\n" + level3o.toString()
                                 + "\n"+ level3n.toString();
                     }
-                    message.setText(text).enableMarkdown(false);
+                    response.setText(text).enableHtml(true);
+                    response.setReplyMarkup(menucreator.createBackInRefMenu());
                     break;
-                    break;
-                case WALLET:
+                case BONUSMENU:
                     response.setText("На вашем счету "+user.getBonus().getCash()+" бонусов" +
-                            "\nНомер вашего кошелька advcash"+user.getPersonalData().getAdvcashcom()+
-                            "\nПрежде чем создать заявку, убедитесь, что номер вашего кошелька advcash верный. Чтобы сменить его введите команду _/advcash НомерКошелька_ " +
+                            "\nНомер вашего кошелька advcash: "+user.getPersonalData().getAdvcashcom()+
+                            "\nПрежде чем создать заявку, убедитесь, что номер вашего кошелька advcash верный. Чтобы сменить его введите команду: \n<b>/advcash</b> <i>номер кошелька</i> " +
                             "\nЗаявки на выплату обрабатываются в конце недели");
                     response.setReplyMarkup(menucreator.createBonusMenu());
+                    response.enableHtml(true);
                     break;
                 case BACKINREFMENU:
-                    String inviteLink= "Чтобы пригласить партнера отправьте ему эту ссылку: https://t.me/tradebeeperbot?start="+user.getChatId();
-                    String walletStatus="\nВ вашем кошельке "+user.getBonus().getCash()+" бонусов";
-                    String referals = "";
-                    if (user.getRightKey()==user.getLeftKey()+1)
-                        referals="\nУ вас нет рефералов";
-                    else
-                        referals="\nКоличесвто ваших рефералов = "+dbService.getChildrenUsers(user.getLevel(),user.getLeftKey(),user.getRightKey()).size();
-
-                    response.setText(inviteLink+
-                            walletStatus+
-                            referals);
+                    response.setText(createTextForRefMenu(user));
                     response.setReplyMarkup(menucreator.createReferalProgMenu());
+                    response.enableHtml(true);
+                    break;
+                case CREATETASKFORPAYMENT:
+                    //если в кошльке больше 0
+                    if (user.getBonus().getCash()!=null&&
+                            user.getBonus().getCash().compareTo(new BigDecimal("0.0"))==1){
+                        Task task = dbService.findOpenPayBonusesTask(user);
+                        //если уже есть заявка
+                        if (task!=null){
+                            response.setText("Вы уже создали заявку "+task.getDateTimeOpening().toLocalDate()+", id заявки="+task.getId()+
+                            "\nЗаявки на выплату обрабатываются в конце недели");
+                        }else {
+                            task=new Task(TaskType.PAY_BONUSES,user);
+                            dbService.mergeTask(task);
+                            response.setText("Заявка создана");
+                        }
+
+                    }else {
+                        response.setText("Бонусов не достаточно для выплаты! \nНужно больше бонусов:-)");
+                    }
+                    response.setReplyMarkup(menucreator.createBackInRefMenu());
                     break;
             }
         }
         return response;
     }
 
-
     private BotApiMethod mainContext(User user, Message request) {
         KeyboardCommand command = KeyboardCommand.getTYPE(request.getText());
         SendMessage response = new SendMessage(user.getChatId(),"Неизвестная команда!");
         switch (command){
+            case START:
+                response.setText("Главное меню:");
+                response.setReplyMarkup(menucreator.createMainMenu());
+                break;
             case MAINMENU:
                 response.setText("Главное меню:");
                 response.setReplyMarkup(menucreator.createMainMenu());
@@ -183,18 +195,9 @@ public class WebhookSevice extends TelegramWebhookBot {
                 response.enableHtml(true);
                 break;
             case REFERALPROG:
-                String inviteLink= "Чтобы пригласить партнера отправьте ему эту <a href=\"https://t.me/tradebeeperbot?start="+user.getChatId()+"\">ССЫЛКУ</a>.\n";
-                String walletStatus="\nВ вашем кошельке "+user.getBonus().getCash()+" бонусов";
-                String referals = "";
-                if (user.getRightKey()==user.getLeftKey()+1)
-                    referals="\nУ вас нет рефералов";
-                else
-                    referals="\nКоличесвто ваших рефералов = "+dbService.getChildrenUsers(user.getLevel(),user.getLeftKey(),user.getRightKey()).size();
-
-                response.setText(inviteLink+
-                        walletStatus+
-                        referals);
+                response.setText(createTextForRefMenu(user));
                 response.setReplyMarkup(menucreator.createReferalProgMenu());
+                response.enableHtml(true);
                 break;
         }
         return response;
@@ -210,7 +213,8 @@ public class WebhookSevice extends TelegramWebhookBot {
     }
 
     private BotApiMethod startContext(Message request) {
-        SendMessage response = new SendMessage(request.getChatId(),"Ошибка:(, вас нет в базе отправьте /start");
+        System.out.println("start контекст: "+request.getText());
+        SendMessage response = new SendMessage(request.getChatId(),"Опаньки :( \nОшибка,  вас нет в базе отправьте /start");
         String textFormRequest = request.getText();
         if (textFormRequest.equals("/start")){
             User user = createNewUser(request, null);
@@ -242,7 +246,7 @@ public class WebhookSevice extends TelegramWebhookBot {
     private Integer getParentUserId(String requestText) throws NoUserInDbException {
         Integer number = null;
         try{
-            number = Integer.parseInt(requestText.substring(10));
+            number = Integer.parseInt(requestText.substring(7));
         }catch (Exception e){
             number=null;
             throw new NoUserInDbException();
@@ -269,7 +273,7 @@ public class WebhookSevice extends TelegramWebhookBot {
 
     private String createTextForRefMenu(User user){
         String response;
-        String inviteLink= "Чтобы пригласить партнера отправьте ему эту ссылку: https://t.me/tradebeeperbot?start="+user.getChatId();
+        String inviteLink= "Чтобы пригласить партнера отправьте ему эту <a href=\"https://t.me/tradebeeperbot?start="+user.getId()+"\">ссылку</a>";
         String walletStatus="\nВ вашем кошельке "+user.getBonus().getCash()+" бонусов";
         String referals = "";
         if (user.getRightKey()==user.getLeftKey()+1)

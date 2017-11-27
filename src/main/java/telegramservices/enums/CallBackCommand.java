@@ -1,15 +1,15 @@
 package telegramservices.enums;
 
-public enum ReferalProgCommand {
+public enum CallBackCommand {
     VIEWREFERALS("Посмотреть рефералов"),
-    WALLET("Выплатить бонусы"),
+    BONUSMENU("Выплатить бонусы"),
     BACKINREFMENU("<=Назад"),
-    CREATETASK("Создать заявку на выплату"),
+    CREATETASKFORPAYMENT("Создать заявку на выплату"),
 
 
     FAIL("Неизвестная команда");
 
-    ReferalProgCommand(String text) {
+    CallBackCommand(String text) {
         this.text = text;
     }
 
@@ -19,9 +19,9 @@ public enum ReferalProgCommand {
         return text;
     }
 
-    public static ReferalProgCommand getTYPE(String s){
-        ReferalProgCommand type = FAIL;
-        for (ReferalProgCommand tempTYPE : ReferalProgCommand.values()){
+    public static CallBackCommand getTYPE(String s){
+        CallBackCommand type = FAIL;
+        for (CallBackCommand tempTYPE : CallBackCommand.values()){
             if (s.equals(tempTYPE.getText()))
                 type = tempTYPE;
         }

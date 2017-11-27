@@ -12,6 +12,7 @@
         <class>entyties.Service</class>
         <class>entyties.Bonus</class>
         <class>entyties.LocalDateTimeConvereter</class>
+        <class>entyties.AdvcashTransaction</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>

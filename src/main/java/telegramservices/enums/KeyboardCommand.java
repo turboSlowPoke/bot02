@@ -1,6 +1,7 @@
 package telegramservices.enums;
 
 public enum KeyboardCommand {
+    START("/start"),
     MAINMENU("Главное меню"),
     //mainmenu
     SIGNALS("Сигналы"),

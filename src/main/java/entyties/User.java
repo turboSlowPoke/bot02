@@ -2,11 +2,12 @@ package entyties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 public class User {
-    @Id @Column(name = "id")
+    @Id @Column(name = "id") @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @Column(name = "level") @NotNull
     private int level;
@@ -21,11 +22,14 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private PersonalData personalData;
     @Column(name = "type")
-    private String type = "client";
+    private String type = "customer";
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Service service;
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Bonus bonus;
+    @ManyToMany(mappedBy = "users",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<AdvcashTransaction> advcashTransactions;
+
 
     public User() {}
 
@@ -83,6 +87,18 @@ public class User {
 
     public Service getService() {
         return service;
+    }
+
+    public List<AdvcashTransaction> getAdvcashTransactions() {
+        return advcashTransactions;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getId() {
+        return id;
     }
 
     @Override

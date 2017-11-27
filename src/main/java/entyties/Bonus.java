@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "bonuswallets")
 public class Bonus {
-    @Id @Column(name = "id")
+    @Id @Column(name = "id") @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @Column(name = "cash",scale = 2,precision = 10)
     private BigDecimal cash;
@@ -20,5 +20,9 @@ public class Bonus {
 
     public BigDecimal getCash() {
         return cash;
+    }
+
+    public List<Integer> getPaidReferalsIdList() {
+        return paidReferalsIdList;
     }
 }

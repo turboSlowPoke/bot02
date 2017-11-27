@@ -1,16 +1,13 @@
 package entyties;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "personaldata")
 public class PersonalData {
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @Column(name = "firstname")
     private String firstName;
@@ -35,6 +32,10 @@ public class PersonalData {
 
     public String getAdvcashcom() {
         return advcashcom;
+    }
+
+    public String getTelegramUsername() {
+        return telegramUsername;
     }
 
     @Override

@@ -7,7 +7,7 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboar
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import telegramservices.enums.KeyboardCommand;
-import telegramservices.enums.ReferalProgCommand;
+import telegramservices.enums.CallBackCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +51,8 @@ public class MenuCreator {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline1 = new ArrayList<>();
-        rowInline1.add(new InlineKeyboardButton().setText(ReferalProgCommand.VIEWREFERALS.getText()).setCallbackData(ReferalProgCommand.VIEWREFERALS.getText()));
-        rowInline1.add(new InlineKeyboardButton().setText(ReferalProgCommand.WALLET.getText()).setCallbackData(ReferalProgCommand.WALLET.getText()));
+        rowInline1.add(new InlineKeyboardButton().setText(CallBackCommand.VIEWREFERALS.getText()).setCallbackData(CallBackCommand.VIEWREFERALS.getText()));
+        rowInline1.add(new InlineKeyboardButton().setText(CallBackCommand.BONUSMENU.getText()).setCallbackData(CallBackCommand.BONUSMENU.getText()));
         rowsInline.add(rowInline1);
         markupInline.setKeyboard(rowsInline);
         return markupInline;
@@ -62,8 +62,18 @@ public class MenuCreator {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline1 = new ArrayList<>();
-        rowInline1.add(new InlineKeyboardButton().setText(ReferalProgCommand.BACKINREFMENU.getText()).setCallbackData(ReferalProgCommand.BACKINREFMENU.getText()));
-        rowInline1.add(new InlineKeyboardButton().setText(ReferalProgCommand.CREATETASK.getText()).setCallbackData(ReferalProgCommand.CREATETASK.getText()));
+        rowInline1.add(new InlineKeyboardButton().setText(CallBackCommand.BACKINREFMENU.getText()).setCallbackData(CallBackCommand.BACKINREFMENU.getText()));
+        rowInline1.add(new InlineKeyboardButton().setText(CallBackCommand.CREATETASKFORPAYMENT.getText()).setCallbackData(CallBackCommand.CREATETASKFORPAYMENT.getText()));
+        rowsInline.add(rowInline1);
+        markupInline.setKeyboard(rowsInline);
+        return markupInline;
+    }
+
+    public InlineKeyboardMarkup createBackInRefMenu() {
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline1 = new ArrayList<>();
+        rowInline1.add(new InlineKeyboardButton().setText(CallBackCommand.BACKINREFMENU.getText()).setCallbackData(CallBackCommand.BACKINREFMENU.getText()));
         rowsInline.add(rowInline1);
         markupInline.setKeyboard(rowsInline);
         return markupInline;
