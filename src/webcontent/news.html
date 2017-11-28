@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="./static/styles/news.css" type="text/css">
+  <link rel="icon" href="./static/images/logo_nw_16х16.png">
+  <title>New Wave</title>
+</head>
+
+<body>
+<nav id="s_navbar1" class="navbar fixed-top navbar-expand-md navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand text-black" href="#"><i class="fa fa-line-chart" aria-hidden="true"></i> <b>New Wave</b></a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+    <div class="collapse navbar-collapse text-center justify-content-end" id="navbar2SupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/"><i class="fa fa-home fa-home"></i>&nbsp;Главная</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/news"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Новости</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/info-faq"><i class="fa fa-info" aria-hidden="true"></i> Информация</a>
+        </li>
+        <#if userName??>
+          <li class="nav-item">
+            <a class="nav-link" href="/lk"><i class="fa fa-user" aria-hidden="true"></i> Кабинет ${userName}</a>
+          </li>
+          <#else>
+            <li class="nav-item">
+              <a class="nav-link" href="/lk"><i class="fa fa-user-o" aria-hidden="true"></i> Кабинет</a>
+            </li>
+        </#if>
+        <#if adminTag??>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin"><i class="fa fa-bolt" aria-hidden="true"></i> admin</a>
+          </li>
+        </#if>
+        <#if userName??>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Выйти</a>
+          </li>
+          <#else>
+            <li class="nav-item">
+              <a class="nav-link" href="/login?pagePath=/"><i class="fa fa-sign-in" aria-hidden="true"></i> Войти</a>
+            </li>
+        </#if>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12"></div>
+    </div>
+  </div>
+</div>
+<#if adminTag??><p><a href="/addnews">Добавить новость</a> </p></#if>
+<#if newsList??>
+<#list newsList as news>
+  <div class="py-1">
+    <div class="container border border-primary">
+      <p class="lead text-white my-2 bg-primary">&nbsp;${news.header} &nbsp;</p>
+      <h6 id="c_heading" class="pi-draggable" draggable="true">${news.dateTime}</h6>
+      <#if adminTag??><a href="/deletenews?id=${news.id}">Удалить запись</a></#if>
+      <#if news.countimages &gt; 0>
+        <#if news.imagesPlace="right">
+          <div class="row">
+            <div class="col-md-7">
+              <#if news.body1??>
+                <p id="c_p1" class="pi-draggable" draggable="true">${news.body1}</p>
+              </#if>
+              <#if news.youtube??>
+                <div class="embed-responsive embed-responsive-16by9 w-75 mx-auto">
+                  ${news.youtube}
+                </div>
+              </#if>
+              <#if news.body2??>
+                <p id="c_p2" class="pi-draggable" draggable="true">${news.body2}</p>
+              </#if>
+            </div>
+            <div class="col-md-5">
+              <div id="s_gallery3" class="pi-draggable">
+                <div class="container-fluid">
+                  <div class="row">
+                    <#list news.imageNames as imageName>
+                      <div class="p-0 col-md-${12/news.countimages} col-6 border-info p-1">
+                        <img src="./static/newsimages/${imageName}" class="img-fluid"> </div>
+                    </#list>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </#if>
+
+        <#if news.imagesPlace="left">
+          <div class="row">
+            <div class="col-md-5">
+              <div id="s_gallery3" class="pi-draggable" draggable="true">
+                <div class="container-fluid">
+                  <div class="row">
+                    <#list news.imageNames as imageName>
+                      <div class="p-0 col-md-${12/news.countimages} col-6 border-info p-1">
+                        <img src="./static/newsimages/${imageName}" class="img-fluid"> </div>
+                    </#list>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-7">
+              <#if news.body1??>
+                <p id="c_p1" class="pi-draggable" draggable="true">${news.body1}</p>
+              </#if>
+              <#if news.youtube??>
+                <div class="embed-responsive embed-responsive-16by9 w-75 mx-auto">
+                  ${news.youtube}
+                </div>
+              </#if>
+              <#if news.body2??>
+                <p id="c_p2" class="pi-draggable" draggable="true">${news.body2}</p>
+              </#if>
+            </div>
+          </div>
+        </#if>
+
+        <#if news.imagesPlace="center">
+          <div class="row">
+            <div class="col-md-12">
+              <#if news.body1??>
+                <p id="c_p1" class="pi-draggable" draggable="true">${news.body1}</p>
+              </#if>
+              <div id="s_gallery" class="pi-draggable w-75 mx-auto" draggable="true">
+                <div class="container-fluid">
+                  <div class="row">
+                    <#list news.imageNames as imageName>
+                      <div class="p-0 col-md-${12/news.countimages} col-6 border-info p-1">
+                        <img src="./static/newsimages/${imageName}" class="img-fluid"> </div>
+                    </#list>
+                  </div>
+                </div>
+              </div>
+              <#if news.youtube??>
+                <div class="embed-responsive embed-responsive-16by9 w-75 mx-auto">
+                  ${news.youtube}
+                </div>
+              </#if>
+              <#if news.body2??>
+                <p id="c_p2" class="pi-draggable" draggable="true">${news.body2}</p>
+              </#if>
+            </div>
+          </div>
+        </#if>
+
+        <#else>
+          <div class="row">
+            <div class="col-md-12">
+              <#if news.body1??>
+                <p id="c_p1" class="pi-draggable" draggable="true">${news.body1}</p>
+              </#if>
+              <#if news.youtube??>
+                <div class="embed-responsive embed-responsive-16by9 w-75 mx-auto">
+                  ${news.youtube}
+                </div>
+              </#if>
+              <#if news.body2??>
+                <p id="c_p2" class="pi-draggable" draggable="true">${news.body2}</p>
+              </#if>
+            </div>
+          </div>
+
+      </#if>
+    </div>
+  </div>
+</#list>
+</#if>
+
+  <div id="s_footer3" class="bg-dark pi-draggable">
+    <p class="mx-auto pt-3 w-100 py-4">
+      <a href="https://t.me/NewWave_bot" class="px-2 mx-4 text-info"><i class="fa fa-telegram fa-1x" aria-hidden="true"></i>&nbsp; &nbsp;Группа в "Telegram"</a>
+      <a href="mailto:info@new-wave.io" class="mx-4 text-info"><i class="fa d-inline mr-3 text-secondary fa-envelope-o"></i>info@new-wave.io</a>
+    </p>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+</body>
+
+</html>

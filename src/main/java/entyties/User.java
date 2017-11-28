@@ -16,7 +16,7 @@ public class User {
     @Column(name = "rightkey") @NotNull
     private int rightKey;
     @Column(name = "parentid")
-    private int parentId;
+    private long parentId;
     @Column(name = "chatId")
     private long chatId;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -71,11 +71,11 @@ public class User {
         return chatId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(long parentId) {
         this.parentId = parentId;
     }
 
-    public int getParentId() {
+    public long getParentId() {
         return parentId;
     }
 

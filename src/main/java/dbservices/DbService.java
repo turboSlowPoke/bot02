@@ -73,9 +73,10 @@ public class DbService {
             log.info("Добавляем приглашенного юзера в базу...");
             EntityManager em = entityManagerFactory.createEntityManager();
             EntityTransaction tr = em.getTransaction();
-            //TypedQuery<User> findParentUserQuery = em.createQuery("SELECT u FROM User u WHERE u.chatId=:id",User.class)
-             //           .setParameter("id",user.getParentId());
-            User parentUser = em.find(User.class,user.getParentId());//findParentUserQuery.getSingleResult();
+            TypedQuery<User> findParentUserQuery = em.createQuery("SELECT u FROM User u WHERE u.chatId=:id",User.class)
+                        .setParameter("id",user.getParentId());
+            //User parentUser = em.find(User.class,user.getParentId());
+            User parentUser = findParentUserQuery.getSingleResult();
             if (parentUser==null)
                 throw new NoUserInDbException();
             Query updateQuery1 = em.createQuery("UPDATE User u SET u.leftKey=u.leftKey+2, u.rightKey=u.rightKey+2 WHERE u.leftKey>:key")
@@ -145,18 +146,18 @@ public class DbService {
         }
     }
 
-    public synchronized void mergeTask(Task task) {
+    public synchronized void mergeEntyti(Object entyti) {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction tr = em.getTransaction();
         tr.begin();
         try {
-            em.merge(task);
+            em.merge(entyti);
             tr.commit();
         }catch (Exception e){
             if (tr.isActive())
                 tr.rollback();
-            System.out.println("Ошибка при сохранении заявки");
-            log.error("Ошибка при сохранении заявки");
+            System.out.println("Ошибка при сохранении сущности: "+entyti);
+            log.error("Ошибка при сохранении сущности "+entyti);
             log.trace(e);
             e.printStackTrace();
         }finally {
@@ -164,4 +165,6 @@ public class DbService {
             em.close();
         }
     }
+
+
 }

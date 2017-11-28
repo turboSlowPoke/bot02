@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Wave</title>
+</head>
+<body>
+<form action="/addnews" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
+    <label>Заголовок</label><input type="text" name="header"><br><br>
+    <label>Фотки</label><input type="file" name="images"><br>
+    <label>Распложение</label>
+    <input type="radio" name="images-place">Справа
+    <input type="radio" name="images-place">Слева
+    <input type="radio" name="images-place">Сверху
+    <br><br>
+    <label>Сссылка на ютуб ролик</label><input type="url" name="youtube"><br>
+    <label>Распложение</label>
+    <input type="radio" name="youtube-place">Сверху
+    <input type="radio" name="youtube-place">Центр
+    <br><br>
+    <label>Абазац1</label><textarea rows="3"  name="body1"></textarea><br>
+    <label>Абазац2</label><textarea rows="3"  name="body2"></textarea><br><br>
+    <button type="submit">просмотр</button>
+</form>
+</body>
+</html>

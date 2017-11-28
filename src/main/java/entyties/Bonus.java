@@ -2,6 +2,7 @@ package entyties;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,6 +24,8 @@ public class Bonus {
     }
 
     public List<Integer> getPaidReferalsIdList() {
+        if (paidReferalsIdList==null)
+            paidReferalsIdList=new ArrayList<>();
         return paidReferalsIdList;
     }
 }

@@ -1,6 +1,6 @@
 package telegramservices.enums;
 
-public enum KeyboardCommand {
+public enum MainCommand {
     START("/start"),
     MAINMENU("Главное меню"),
     //mainmenu
@@ -16,7 +16,7 @@ public enum KeyboardCommand {
 
     FAIL("Неизвестная команда");
 
-    KeyboardCommand(String text) {
+    MainCommand(String text) {
         this.text = text;
     }
 
@@ -26,9 +26,9 @@ public enum KeyboardCommand {
         return text;
     }
 
-    public static KeyboardCommand getTYPE(String s){
-        KeyboardCommand type = FAIL;
-        for (KeyboardCommand tempTYPE : KeyboardCommand.values()){
+    public static MainCommand getTYPE(String s){
+        MainCommand type = FAIL;
+        for (MainCommand tempTYPE : MainCommand.values()){
             if (s.equals(tempTYPE.getText()))
                 type = tempTYPE;
         }

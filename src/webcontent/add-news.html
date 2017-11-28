@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-beta.1.css" type="text/css"> </head>
+
+<body>
+
+  <div id="s_form2" class="bg-light py-5">
+    <div class="container pt-5">
+      <div class="row">
+        <div class="col-md-12">
+          <p class="lead pi-draggable" id="c_lead">Добавить новость</p>
+          <form action="/addnews" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
+            <div class="form-group"> <label for="InputName">&nbsp;Заголовок</label>
+              <input type="text" class="form-control" id="InputName" name="header">
+            </div>
+            <br>
+            <br>
+            <label class="custom-file">Выберите изображения
+  							<p><input type="file" name="pic" multiple="true">
+                              <input type="radio" name="imagesPlace" value="right">Справа
+                              <input type="radio" name="imagesPlace" value="left">Слева
+                              <input type="radio" name="imagesPlace" value="center">В центре</p>
+            </label>
+            <br>
+            <br>
+            <br>
+            <div class="form-group"> <label for="InputName2">&nbsp;Youtube</label>
+              <input type="text" class="form-control" id="InputName2" name="youtube">
+            </div>
+            <br>
+            <br>
+            <div class="form-group"> <label for="Textarea1">&nbsp;Текст1</label> <textarea class="form-control" id="Textarea1" rows="10" placeholder="Type here" name="body1"></textarea>
+            </div>
+            <div class="form-group"> <label for="Textarea2">&nbsp;Текст2</label> <textarea class="form-control" id="Textarea2" rows="10" placeholder="Type here" name="body2"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Просмотр</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+</body>
+
+</html>

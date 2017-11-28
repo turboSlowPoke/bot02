@@ -13,7 +13,7 @@ import org.telegram.telegrambots.api.objects.CallbackQuery;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
-import telegramservices.enums.KeyboardCommand;
+import telegramservices.enums.MainCommand;
 import telegramservices.enums.CallBackCommand;
 
 import java.math.BigDecimal;
@@ -72,7 +72,6 @@ public class WebhookSevice extends TelegramWebhookBot {
                         List<User> userList = dbService.getChildrenUsers(parentLevel, parentLeftKey, parentRightKey);
                         StringBuilder level1o = new StringBuilder();
                         StringBuilder level1n = new StringBuilder();
-                        int countlevel1=0;
                         StringBuilder level2o = new StringBuilder();
                         StringBuilder level2n = new StringBuilder();
                         StringBuilder level3o = new StringBuilder();
@@ -81,7 +80,6 @@ public class WebhookSevice extends TelegramWebhookBot {
                             if (parentLevel + 1 == u.getLevel()) {
                                 if (u.getAdvcashTransactions().size()>0){
                                     level1o.append(u.getPersonalData().getTelegramUsername()+"+\n");
-                                    countlevel1++;
                                 }else
                                 {
                                     level1n.append(u.getPersonalData().getTelegramUsername()+"\n");
@@ -89,7 +87,6 @@ public class WebhookSevice extends TelegramWebhookBot {
                             } else if (parentLevel + 2 == u.getLevel()) {
                                 if (u.getAdvcashTransactions().size()>0){
                                     level2o.append(u.getPersonalData().getTelegramUsername()+"+\n");
-                                    countlevel1++;
                                 }else
                                 {
                                     level2n.append(u.getPersonalData().getTelegramUsername()+"\n");
@@ -97,7 +94,6 @@ public class WebhookSevice extends TelegramWebhookBot {
                             } else {
                                 if (u.getAdvcashTransactions().size()>0){
                                     level3o.append(u.getPersonalData().getTelegramUsername()+"+\n");
-                                    countlevel1++;
                                 }else
                                 {
                                     level3n.append(u.getPersonalData().getTelegramUsername()+"\n");
@@ -105,15 +101,15 @@ public class WebhookSevice extends TelegramWebhookBot {
                             }
                         }
                         text = "<b>Рефералы 1го уровня:</b> "
-                                + "\n<i>(оплативших подписку - "+user.getBonus().getPaidReferalsIdList().size()+")</i>"
-                                + "\n" + level1o.toString()
-                                + "\n" + level1n.toString()
+                                + "\n<i>(оплативших подписку - "+user.getBonus().getPaidReferalsIdList().size()+")</i>\n"
+                                +  level1o.toString()
+                                +  level1n.toString()
                                 + "\n<b>Рефералы 2го уровня:</b> "
-                                + "\n" + level2o.toString()
-                                +"\n" + level2n.toString()
+                                +  level2o.toString()
+                                +  level2n.toString()
                                 + "\n<b>Рефералы 3го уровня:</b> "
-                                + "\n" + level3o.toString()
-                                + "\n"+ level3n.toString();
+                                +  level3o.toString()
+                                +  level3n.toString()+"\n";
                     }
                     response.setText(text).enableHtml(true);
                     response.setReplyMarkup(menucreator.createBackInRefMenu());
@@ -121,7 +117,7 @@ public class WebhookSevice extends TelegramWebhookBot {
                 case BONUSMENU:
                     response.setText("На вашем счету "+user.getBonus().getCash()+" бонусов" +
                             "\nНомер вашего кошелька advcash: "+user.getPersonalData().getAdvcashcom()+
-                            "\nПрежде чем создать заявку, убедитесь, что номер вашего кошелька advcash верный. Чтобы сменить его введите команду: \n<b>/advcash</b> <i>номер кошелька</i> " +
+                            "\nПрежде чем создать заявку, убедитесь, что номер вашего <b>долларового</b> кошелька advcash верный. Чтобы сменить его введите команду: \n<b>/advcash</b> <i>НомерКошелька</i> " +
                             "\nЗаявки на выплату обрабатываются в конце недели");
                     response.setReplyMarkup(menucreator.createBonusMenu());
                     response.enableHtml(true);
@@ -142,7 +138,7 @@ public class WebhookSevice extends TelegramWebhookBot {
                             "\nЗаявки на выплату обрабатываются в конце недели");
                         }else {
                             task=new Task(TaskType.PAY_BONUSES,user);
-                            dbService.mergeTask(task);
+                            dbService.mergeEntyti(task);
                             response.setText("Заявка создана");
                         }
 
@@ -157,50 +153,88 @@ public class WebhookSevice extends TelegramWebhookBot {
     }
 
     private BotApiMethod mainContext(User user, Message request) {
-        KeyboardCommand command = KeyboardCommand.getTYPE(request.getText());
+        MainCommand command = MainCommand.getTYPE(request.getText());
         SendMessage response = new SendMessage(user.getChatId(),"Неизвестная команда!");
-        switch (command){
-            case START:
-                response.setText("Главное меню:");
-                response.setReplyMarkup(menucreator.createMainMenu());
-                break;
-            case MAINMENU:
-                response.setText("Главное меню:");
-                response.setReplyMarkup(menucreator.createMainMenu());
-                break;
-            case SIGNALS:
-                if (subscribeIsActive(user.getService()))
-                    response.setText("Здесь будут сигналы");
-                else
-                    response.setText("Сигналы доступны при наличии подписки, вам необходимо ее оплатить.");
-                break;
-            case NEWS:
-                response.setText("Здесь будут новости");
-                break;
-            case CHAT:
-                response.setText("Здесь будет ссылка на чат");
-                break;
-            case SUBSCRIBE:
-                String endSubscribe = "";
-                if (user.getService()!=null&&user.getService().getEndOfSubscription()!=null) {
-                    if (user.getService().getEndOfSubscription().isBefore(LocalDateTime.now()))
-                        endSubscribe = "Ваша подписка заканчивается " + user.getService().getEndOfSubscription().toLocalDate() + ", вы можете её продлить";
+        if (command!= MainCommand.FAIL) {
+            switch (command) {
+                case START:
+                    response.setText("Главное меню:");
+                    response.setReplyMarkup(menucreator.createMainMenu());
+                    break;
+                case MAINMENU:
+                    response.setText("Главное меню:");
+                    response.setReplyMarkup(menucreator.createMainMenu());
+                    break;
+                case SIGNALS:
+                    if (subscribeIsActive(user.getService()))
+                        response.setText("Здесь будут сигналы");
                     else
-                        endSubscribe="Ваша подписка закончилась " + user.getService().getEndOfSubscription().toLocalDate() + ", вы можете её продлить";
-                }
-                response.setText(endSubscribe+
-                        "\nНа данный момент мы принимаем платежи только с кошельков <a href=\"https://advcash.com/\">AdvCash</a>."+
-                        "\nВыберите вариант подписки:\n");
-                response.setReplyMarkup(menucreator.createSubscriptionMenu());
-                response.enableHtml(true);
-                break;
-            case REFERALPROG:
-                response.setText(createTextForRefMenu(user));
-                response.setReplyMarkup(menucreator.createReferalProgMenu());
-                response.enableHtml(true);
-                break;
+                        response.setText("Сигналы доступны при наличии подписки, вам необходимо ее оплатить.");
+                    break;
+                case NEWS:
+                    response.setText("Здесь будут новости");
+                    break;
+                case CHAT:
+                    response.setText("Здесь будет ссылка на чат");
+                    break;
+                case SUBSCRIBE:
+                    String endSubscribe = "";
+                    if (user.getService() != null && user.getService().getEndOfSubscription() != null) {
+                        if (user.getService().getEndOfSubscription().isBefore(LocalDateTime.now()))
+                            endSubscribe = "Ваша подписка заканчивается " + user.getService().getEndOfSubscription().toLocalDate() + ", вы можете её продлить";
+                        else
+                            endSubscribe = "Ваша подписка закончилась " + user.getService().getEndOfSubscription().toLocalDate() + ", вы можете её продлить";
+                    }
+                    response.setText(endSubscribe +
+                            "\nНа данный момент мы принимаем платежи только с кошельков <a href=\"https://advcash.com/\">AdvCash</a>." +
+                            "\nВыберите вариант подписки:\n");
+                    response.setReplyMarkup(menucreator.createSubscriptionMenu());
+                    response.enableHtml(true);
+                    break;
+                case REFERALPROG:
+                    response.setText(createTextForRefMenu(user));
+                    response.setReplyMarkup(menucreator.createReferalProgMenu());
+                    response.enableHtml(true);
+                    break;
+            }
+        }else if (request.getText().startsWith("/advcash")){
+            String advcashVallet = getValidAdvcash(request.getText().substring(9));
+            if (advcashVallet!=null) {
+                PersonalData personalData = user.getPersonalData();
+                personalData.setAdvcashcom(advcashVallet);
+                dbService.mergeEntyti(personalData);
+                log.info("юзер "+user+" обновил свой advcash "+request.getText());
+                response.setText("Номер кошелка advcash изменён на "+personalData.getAdvcashcom());
+            }else {
+                log.info("юзер "+user+"неправильно ввел номер advcash:"+request.getText());
+                System.out.println("юзер "+user+"неправильно ввел номер advcash:"+request.getText());
+                response.setText("Номер кошелька не корректный, укажите номер долларового кошелька, в одном из форматов" +
+                        "\n/advcash U 1111 2222 3333" +
+                        "\n/advcash U123412341234" +
+                        "\n/advcash 1234 1234 1234" +
+                        "\n/advcash 123412341234");
+            }
         }
         return response;
+    }
+
+    private String getValidAdvcash(String substring) {
+        String advcash="";
+        String p = "(U(\\s\\d{4}){3})|(U(\\d){12})|((\\d){12})|(\\d{4}(\\s\\d{4}){2})";//"(U[\\s[\\d]{4})]{3})";
+        Pattern pattern = Pattern.compile(p,Pattern.UNICODE_CHARACTER_CLASS);
+        if (advcash!=null) {
+            try {
+                Matcher matcher = pattern.matcher(substring);
+                if (matcher.matches())
+                    advcash = substring;
+                else
+                    advcash=null;
+
+            } catch (Exception e) {
+                System.out.println("Не прошло проверку имя "+substring);
+            }
+        }
+        return advcash;
     }
 
     private boolean subscribeIsActive(Service service) {
@@ -228,7 +262,7 @@ public class WebhookSevice extends TelegramWebhookBot {
             response.setReplyMarkup(menucreator.createMainMenu());
         }else if (textFormRequest.startsWith("/start")){
             try {
-                Integer parentUserId = getParentUserId(request.getText());
+                Long parentUserId = getParentUserId(request.getText());
                 dbService.addUser(createNewUser(request, parentUserId), ActionType.ADDCHILDRENUSER);
                 response.setText("Добро пожаловать! \nВыберите пункт меню:");
                 response.setReplyMarkup(menucreator.createMainMenu());
@@ -243,10 +277,10 @@ public class WebhookSevice extends TelegramWebhookBot {
         return response;
     }
 
-    private Integer getParentUserId(String requestText) throws NoUserInDbException {
-        Integer number = null;
+    private Long getParentUserId(String requestText) throws NoUserInDbException {
+        Long number = null;
         try{
-            number = Integer.parseInt(requestText.substring(7));
+            number = Long.parseLong(requestText.substring(7));
         }catch (Exception e){
             number=null;
             throw new NoUserInDbException();
@@ -254,7 +288,7 @@ public class WebhookSevice extends TelegramWebhookBot {
         return number;
     }
 
-    public User createNewUser(Message incomingMessage, Integer parentUserId) {
+    public User createNewUser(Message incomingMessage, Long parentUserId) {
         String firstName = getNameIfIsValid(incomingMessage.getChat().getFirstName());
         String lastName = getNameIfIsValid(incomingMessage.getChat().getLastName());
         long chatId = incomingMessage.getChatId();
@@ -273,15 +307,13 @@ public class WebhookSevice extends TelegramWebhookBot {
 
     private String createTextForRefMenu(User user){
         String response;
-        String inviteLink= "Чтобы пригласить партнера отправьте ему эту <a href=\"https://t.me/tradebeeperbot?start="+user.getId()+"\">ссылку</a>";
+        String inviteLink= "Чтобы пригласить партнера отправьте ему эту <a href=\"https://t.me/tradebeeperbot?start="+user.getChatId()+"\">ссылку</a>";
         String walletStatus="\nВ вашем кошельке "+user.getBonus().getCash()+" бонусов";
         String referals = "";
         if (user.getRightKey()==user.getLeftKey()+1)
             referals="\nУ вас нет рефералов";
         else
-            referals="\nКоличесвто ваших рефералов = "+dbService.getChildrenUsers(user.getLevel(),user.getLeftKey(),user.getRightKey()).size()+
-                    "\nИз них оплатили ";
-
+            referals="\nКоличесвто ваших рефералов "+dbService.getChildrenUsers(user.getLevel(),user.getLeftKey(),user.getRightKey()).size();
         response = inviteLink+ walletStatus+ referals;
         return response;
     }

@@ -38,6 +38,10 @@ public class PersonalData {
         return telegramUsername;
     }
 
+    public void setAdvcashcom(String advcashcom) {
+        this.advcashcom = advcashcom;
+    }
+
     @Override
     public String toString() {
         return "\nПерсональные данные: id="+id+", имя="+firstName+", фамилия="+lastName+", @telegram="+telegramUsername;
