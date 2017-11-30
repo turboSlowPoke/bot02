@@ -28,4 +28,14 @@ public class Bonus {
             paidReferalsIdList=new ArrayList<>();
         return paidReferalsIdList;
     }
+
+    public void setCash(BigDecimal cash) {
+        this.cash = cash;
+    }
+
+    public void addPaidReferalsId(Integer userId){
+        if (paidReferalsIdList==null)
+            paidReferalsIdList = new ArrayList<>();
+        paidReferalsIdList.add(userId);
+    }
 }

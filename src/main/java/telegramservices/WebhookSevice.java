@@ -78,21 +78,21 @@ public class WebhookSevice extends TelegramWebhookBot {
                         StringBuilder level3n = new StringBuilder();
                         for (User u : userList) {
                             if (parentLevel + 1 == u.getLevel()) {
-                                if (u.getAdvcashTransactions().size()>0){
+                                if (u.getService()!=null){
                                     level1o.append(u.getPersonalData().getTelegramUsername()+"+\n");
                                 }else
                                 {
                                     level1n.append(u.getPersonalData().getTelegramUsername()+"\n");
                                 }
                             } else if (parentLevel + 2 == u.getLevel()) {
-                                if (u.getAdvcashTransactions().size()>0){
+                                if (u.getService()!=null){
                                     level2o.append(u.getPersonalData().getTelegramUsername()+"+\n");
                                 }else
                                 {
                                     level2n.append(u.getPersonalData().getTelegramUsername()+"\n");
                                 }
                             } else {
-                                if (u.getAdvcashTransactions().size()>0){
+                                if (u.getService()!=null){
                                     level3o.append(u.getPersonalData().getTelegramUsername()+"+\n");
                                 }else
                                 {

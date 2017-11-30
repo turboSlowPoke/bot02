@@ -167,4 +167,42 @@ public class DbService {
     }
 
 
+    public User findUser(Integer userId) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        User user = null;
+        try {
+            user = em.find(User.class,userId);
+        }catch (Exception e){
+            log.error("Ошибка при поиске юзера");
+            log.trace(e);
+            System.out.println("Ошибка при поиске юзера");
+            e.printStackTrace();
+            user=null;
+        }finally {
+            em.clear();
+            em.close();
+        }
+        return user;
+    }
+
+    public List<User> getParenUsers(int level, int leftKey, int rightKey) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Query query = em.createQuery("SELECT u FROM User u WHERE u.leftKey<=:lk AND u.rightKey>=:rk AND u.level<:l AND u.level>:l-4")
+                .setParameter("l",level)
+                .setParameter("lk",leftKey)
+                .setParameter("rk",rightKey);
+        List<User> users = null;
+        try {
+            users = query.getResultList();
+        }catch (Exception e){
+            log.error("Ошибка при поиске родителей");
+            log.trace(e);
+            System.out.println("Ошибка при поиске родителей");
+            users=null;
+        }finally {
+            em.clear();
+            em.close();
+            return users;
+        }
+    }
 }

@@ -15,4 +15,12 @@ public class Service {
     public LocalDateTime getEndOfSubscription() {
         return endOfSubscription;
     }
+
+
+    public void renewSubscription(Long monts){
+        if (endOfSubscription.isBefore(LocalDateTime.now()))
+            endOfSubscription=LocalDateTime.now().plusMonths(monts);
+        else
+            endOfSubscription=endOfSubscription.plusMonths(monts);
+    }
 }

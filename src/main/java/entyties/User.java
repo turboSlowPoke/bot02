@@ -27,8 +27,6 @@ public class User {
     private Service service;
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Bonus bonus;
-    @ManyToMany(mappedBy = "users",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<AdvcashTransaction> advcashTransactions;
 
 
     public User() {}
@@ -89,9 +87,7 @@ public class User {
         return service;
     }
 
-    public List<AdvcashTransaction> getAdvcashTransactions() {
-        return advcashTransactions;
-    }
+
 
     public String getType() {
         return type;

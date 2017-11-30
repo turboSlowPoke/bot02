@@ -34,9 +34,10 @@ public class Main {
         ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         contextHandler.setContextPath("/");
         ServletHolder staticHolder = new ServletHolder(new DefaultServlet());
-        staticHolder.setInitParameter("resourceBase", "../resources/main/webcontent/static/");
+        staticHolder.setInitParameter("resourceBase", "./tradebeepercontent/static/");
         staticHolder.setInitParameter("pathInfoOnly", "true");
         contextHandler.addServlet(staticHolder, "/static/*");
+
 
         server.setHandler(contextHandler);
         server.start();
