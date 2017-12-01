@@ -1,14 +1,11 @@
 package websevices.servlets;
 
-import db_services.DbService;
-import entitys.AdvcashTransaction;
-import entitys.LocalTransaction;
-import entitys.User;
+
+import entyties.AdvcashTransaction;
+import entyties.User;
 import org.apache.log4j.Logger;
-import templayter.PageGenerator;
-import validarors.SessionValidator;
-import wrappers.AcPayment;
-import wrappers.RefPayment;
+import websevices.validarors.SessionValidator;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,6 +28,7 @@ public class AdminLkPaimendsServlet extends HttpServlet {
         if (validator.isAuthorizedAsAdmin(session)){
             User user = (User) session.getAttribute("user");
             //достаём транзакции AС, конвертируем в AcPayment
+            /*
             List<AdvcashTransaction> acTransactions = DbService.getInstance().getAcTransacrions();
             List<AcPayment> acPayments =  new ArrayList<>();
             for (AdvcashTransaction t : acTransactions) {
@@ -53,9 +51,10 @@ public class AdminLkPaimendsServlet extends HttpServlet {
             resp.setContentType("text/html;charset=UTF-8");
             resp.getWriter().append(PageGenerator.instance().getStaticPage("adminlk-payments.html", dataMap));
 
-        }else {
+        */}else {
             resp.sendRedirect("/login");
         }
+
     }
 
     @Override

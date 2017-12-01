@@ -1,9 +1,8 @@
 package websevices.servlets;
 
-import db_services.DbService;
-import entitys.News;
+
 import org.apache.log4j.Logger;
-import validarors.SessionValidator;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class DeleteNews extends HttpServlet {
+    /*
     private static final Logger log = Logger.getLogger(DeleteNews.class);
     SessionValidator validator = new SessionValidator();
 
@@ -40,4 +40,5 @@ public class DeleteNews extends HttpServlet {
             resp.sendRedirect("/login");
         }
     }
+    */
 }

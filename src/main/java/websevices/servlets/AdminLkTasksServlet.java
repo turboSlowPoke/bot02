@@ -1,13 +1,8 @@
 package websevices.servlets;
 
-import db_services.DbService;
-import entitys.Task;
-import entitys.TaskStatus;
-import entitys.User;
+
 import org.apache.log4j.Logger;
-import templayter.PageGenerator;
-import validarors.SessionValidator;
-import wrappers.TaskWrapper;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AdminLkTasksServlet extends HttpServlet {
+    /*
     private static final Logger log = Logger.getLogger(AdminLkTasksServlet.class);
     SessionValidator validator = new SessionValidator();
 
@@ -71,4 +67,5 @@ public class AdminLkTasksServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req,resp);
     }
+    */
 }

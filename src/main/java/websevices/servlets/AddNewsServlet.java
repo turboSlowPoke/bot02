@@ -1,11 +1,13 @@
 package websevices.servlets;
 
 
-import db_services.DbService;
-import entitys.News;
+
+import dbservices.DbService;
+import entyties.News;
 import org.apache.log4j.Logger;
-import templayter.PageGenerator;
-import validarors.SessionValidator;
+import websevices.templayter.PageGenerator;
+import websevices.validarors.SessionValidator;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -79,7 +81,7 @@ public class AddNewsServlet extends HttpServlet {
             if (news != null) {
                 String publish = req.getParameter("publish");
                 if (publish != null && publish.equals("true")) {
-                    DbService.getInstance().addNews(news);
+                    DbService.getInstance().mergeEntyti(news);
                     session.removeAttribute("precheckNews");
                     resp.sendRedirect("/news");
                 } else {

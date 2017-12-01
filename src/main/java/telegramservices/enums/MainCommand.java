@@ -12,7 +12,7 @@ public enum MainCommand {
     //подписка
     SUBSCRIPTION1("Месяц 50$"),
     SUBSCRIPTION2("Три месяца 120$"),
-    SUBSCRIPTION3("Шесть месяцев 190$"),
+    SUBSCRIPTION3("Шесть месяцев 200$"),
 
     FAIL("Неизвестная команда");
 
