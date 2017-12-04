@@ -18,7 +18,7 @@ public class PageGenerator {
     public PageGenerator() {
         cfg =  new Configuration(Configuration.VERSION_2_3_23);
         try {
-            cfg.setDirectoryForTemplateLoading(new File("./tradebeepercontent"));
+            cfg.setDirectoryForTemplateLoading(new File("./webcontent"));
             cfg.setDefaultEncoding("UTF-8");
         } catch (IOException e) {
             System.out.println(" не смог найти директорию templates ");

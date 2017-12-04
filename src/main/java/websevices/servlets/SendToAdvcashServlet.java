@@ -74,6 +74,9 @@ public class SendToAdvcashServlet extends HttpServlet {
 
             log.info("Запрос обработан, страница с авто submit-ом отправлена order_id="+ac_order_id);
             System.out.println("Запрос обработан, страница с авто submit-ом отправлена order_id="+ac_order_id);
+            System.out.println("hash="+ac_sign);
+            System.out.println("amount="+ac_amount);
+            System.out.println("orderId="+ac_order_id);
 
         }catch (NumberFormatException  e){
             log.error("Некорректный userid="+userIdString);
@@ -95,6 +98,7 @@ public class SendToAdvcashServlet extends HttpServlet {
 
     private String createHash(String amount, String orderId) {
         String checkString = Config.accountEmail+":"+Config.sciName+":"+amount+":"+Config.merchantCurrency+":"+Config.secret+":"+orderId;
+
         String hash=null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

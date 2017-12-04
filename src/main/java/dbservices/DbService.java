@@ -1,10 +1,7 @@
 package dbservices;
 
 
-import entyties.Task;
-import entyties.TaskStatus;
-import entyties.TaskType;
-import entyties.User;
+import entyties.*;
 import org.apache.log4j.Logger;
 
 import javax.persistence.*;
@@ -186,6 +183,8 @@ public class DbService {
     }
 
     public List<User> getParenUsers(int level, int leftKey, int rightKey) {
+        System.out.println("Ищем родителей....");
+        log.info("Ищем родителей....");
         EntityManager em = entityManagerFactory.createEntityManager();
         Query query = em.createQuery("SELECT u FROM User u WHERE u.leftKey<=:lk AND u.rightKey>=:rk AND u.level<:l AND u.level>:l-4")
                 .setParameter("l",level)
@@ -194,6 +193,13 @@ public class DbService {
         List<User> users = null;
         try {
             users = query.getResultList();
+            if (users!=null) {
+                System.out.println("Найдено "+users.size()+" родителей");
+                log.info("Найдено "+users.size()+" родителей");
+            }else {
+                System.out.print("Родителей не найдено");
+                log.info("Родителей не найдено");
+            }
         }catch (Exception e){
             log.error("Ошибка при поиске родителей");
             log.trace(e);
@@ -204,5 +210,9 @@ public class DbService {
             em.close();
             return users;
         }
+    }
+
+    public List<News> getNews() {
+        return null;
     }
 }

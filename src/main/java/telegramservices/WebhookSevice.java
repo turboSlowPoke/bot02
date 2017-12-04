@@ -78,14 +78,14 @@ public class WebhookSevice extends TelegramWebhookBot {
                         StringBuilder level3n = new StringBuilder();
                         for (User u : userList) {
                             if (parentLevel + 1 == u.getLevel()) {
-                                if (u.getService()!=null){
+                                if (u.getService().getEndOfSubscription()!=null){
                                     level1o.append(u.getPersonalData().getTelegramUsername()+"+\n");
                                 }else
                                 {
                                     level1n.append(u.getPersonalData().getTelegramUsername()+"\n");
                                 }
                             } else if (parentLevel + 2 == u.getLevel()) {
-                                if (u.getService()!=null){
+                                if (u.getService().getEndOfSubscription()!=null){
                                     level2o.append(u.getPersonalData().getTelegramUsername()+"+\n");
                                 }else
                                 {
@@ -188,7 +188,7 @@ public class WebhookSevice extends TelegramWebhookBot {
                     response.setText(endSubscribe +
                             "\nНа данный момент мы принимаем платежи только с кошельков <a href=\"https://advcash.com/\">AdvCash</a>." +
                             "\nВыберите вариант подписки:\n");
-                    response.setReplyMarkup(menucreator.createSubscriptionMenu());
+                    response.setReplyMarkup(menucreator.createSubscriptionMenu(user.getId()));
                     response.enableHtml(true);
                     break;
                 case REFERALPROG:

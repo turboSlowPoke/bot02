@@ -33,14 +33,14 @@ public class MenuCreator {
     }
 
 
-    public InlineKeyboardMarkup createSubscriptionMenu() {
+    public InlineKeyboardMarkup createSubscriptionMenu(Integer userId) {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline1 = new ArrayList<>();
-        rowInline1.add(new InlineKeyboardButton().setText(MainCommand.SUBSCRIPTION1.getText()).setUrl("advcash.com"));
-        rowInline1.add(new InlineKeyboardButton().setText(MainCommand.SUBSCRIPTION2.getText()).setUrl("advcash.com"));
+        rowInline1.add(new InlineKeyboardButton().setText(MainCommand.SUBSCRIPTION1.getText()).setUrl("http://290193.msk-kvm.ru/sendtoac?userId="+userId+"&typeOfService=1month"));
+        rowInline1.add(new InlineKeyboardButton().setText(MainCommand.SUBSCRIPTION2.getText()).setUrl("http://290193.msk-kvm.ru/sendtoac?userId="+userId+"&typeOfService=3month"));
         List<InlineKeyboardButton> rowInline2 = new ArrayList<>();
-        rowInline2.add(new InlineKeyboardButton().setText(MainCommand.SUBSCRIPTION3.getText()).setUrl("advcash.com"));
+        rowInline2.add(new InlineKeyboardButton().setText(MainCommand.SUBSCRIPTION3.getText()).setUrl("http://290193.msk-kvm.ru/sendtoac?userId="+userId+"&typeOfService=6month"));
         rowsInline.add(rowInline1);
         rowsInline.add(rowInline2);
         markupInline.setKeyboard(rowsInline);

@@ -18,7 +18,7 @@ public class Service {
 
 
     public void renewSubscription(Long monts){
-        if (endOfSubscription.isBefore(LocalDateTime.now()))
+       if (endOfSubscription==null||endOfSubscription.isBefore(LocalDateTime.now()))
             endOfSubscription=LocalDateTime.now().plusMonths(monts);
         else
             endOfSubscription=endOfSubscription.plusMonths(monts);

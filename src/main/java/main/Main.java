@@ -11,6 +11,7 @@ import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.exceptions.TelegramApiRequestException;
 import telegramservices.WebhookSevice;
+import websevices.servlets.*;
 
 public class Main {
     private static final Logger log = Logger.getLogger(Main.class);
@@ -34,9 +35,16 @@ public class Main {
         ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         contextHandler.setContextPath("/");
         ServletHolder staticHolder = new ServletHolder(new DefaultServlet());
-        staticHolder.setInitParameter("resourceBase", "./tradebeepercontent/static/");
+        staticHolder.setInitParameter("resourceBase", "./webcontent/static/");
         staticHolder.setInitParameter("pathInfoOnly", "true");
         contextHandler.addServlet(staticHolder, "/static/*");
+        contextHandler.addServlet(RootServlet.class,"/");
+        contextHandler.addServlet(InfoAboutServlet.class,"/info-about");
+        contextHandler.addServlet(InfoFAQServlet.class,"/info-faq");
+        contextHandler.addServlet(InfoContactsServlet.class,"/info-contacts");
+        contextHandler.addServlet(StatusPayServlet.class,"/status");
+        contextHandler.addServlet(SendToAdvcashServlet.class,"/sendtoac");
+
 
 
         server.setHandler(contextHandler);

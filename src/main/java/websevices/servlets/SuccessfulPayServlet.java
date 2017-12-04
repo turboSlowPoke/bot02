@@ -1,7 +1,8 @@
 package websevices.servlets;
 
 import org.apache.log4j.Logger;
-import templayter.PageGenerator;
+import websevices.templayter.PageGenerator;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

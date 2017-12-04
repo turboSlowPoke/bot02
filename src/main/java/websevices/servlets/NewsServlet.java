@@ -1,7 +1,10 @@
 package websevices.servlets;
 
 
+import dbservices.DbService;
+import entyties.News;
 import entyties.User;
+import websevices.templayter.PageGenerator;
 import websevices.validarors.SessionValidator;
 
 import javax.servlet.ServletException;

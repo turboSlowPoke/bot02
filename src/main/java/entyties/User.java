@@ -35,6 +35,7 @@ public class User {
         this.chatId=chatId;
         this.personalData = personalData;
         this.service=new Service();
+        this.bonus = new Bonus();
     }
 
     public void setLevel(int level) {

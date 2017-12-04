@@ -12,7 +12,7 @@ public class Bonus {
     private int id;
     @Column(name = "cash",scale = 2,precision = 10)
     private BigDecimal cash;
-    @ElementCollection  @Column(name = "paidreferals")
+    @ElementCollection
     private List<Integer> paidReferalsIdList;
 
     public Bonus() {
