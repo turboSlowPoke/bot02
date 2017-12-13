@@ -28,6 +28,6 @@ public class RootServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.setContentType("text/html;charset=UTF-8");
-        resp.getWriter().append(PageGenerator.instance().getStaticPage("root01.html", null));
+        resp.getWriter().append(PageGenerator.instance().getStaticPage("root02.html", null));
     }
 }

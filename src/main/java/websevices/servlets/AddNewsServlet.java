@@ -1,13 +1,10 @@
 package websevices.servlets;
 
-
-
 import dbservices.DbService;
 import entyties.News;
 import org.apache.log4j.Logger;
 import websevices.templayter.PageGenerator;
 import websevices.validarors.SessionValidator;
-
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -20,7 +17,6 @@ import java.util.*;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
-;
 
 @MultipartConfig
 public class AddNewsServlet extends HttpServlet {
